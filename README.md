@@ -463,11 +463,150 @@ let obj = Object.clone(p);
 
 =======================================
 
+ES 6 / 7 ==> most of JS engines don't understand them
+we need to convert them into ES 5 or lower version
+Transpiler ==> Transcompiler
+a) Babel
+c) Tracuer
+==========
+
+9) class 
+
+class Person {
+	constructor(name = "", age = 0) {
+		this.name = name;
+		this.age = age;
+	}
+
+	getName() {
+		return this.name;
+	}
+}
+
+let p = new Person("Tim", 23);
+
+internally it is prototype
+function Person() {
+	this.name =...
+}
+
+Person.prototype.getName = function () {
+	
+}
+
+=============================
+
+10) ES 6 Module system
+
+time.js
+export class Time {
+	
+}
+
+export const add = (x,y) => x + y;
+
+other.js
+
+import {Time, add} from './time';
+
+let t = new Time();
+
+==========
 
 
+time.js
+export default class Time {
+	
+}
+export const add = (x,y) => x + y;
 
+other.js
+import Time, {add} from './time';
+let t = new Time();
 
+========================
 
+Node.js LTS
+
+Node modules, Webpack after the TEA Break
+==============================================
+
+Node.js ==> JavaScript environment built on top of V8 engine
+
+Where can i use node.js
+1) server side code ==> APIs
+2) Real time application [ chat bot]
+3) Streaming 
+4) Anyting which is async operations
+*** 5) as an environment for building web application ***
+
+=========
+
+simple application
+
+NPM ==> Node package manager
+
+Node installation comes with many pre-defined modules [ http, fs, repl, url, cluster,..]
+
+NPM helps to manage dependencies
+
+npm init -y
+
+creates package.json
+==> information about your application 
+	==> dependencies [ dependenciies required in production]
+	==> devDependencies [ required only for development stage ==> like testing]
+==> scripts
+
+===============
+
+package.json ==> maven pom.xml
+
+npm install -D mocha chai request
+
+mocha ==> unit testing
+chai ==> assertion library
+request ==> to make HTTP calls for testing
+
+Node,js uses Common Module system and not ES 6 module system
+
+========================
+
+Unit testing JS:
+ Different librariries / frameworks
+ a) Jasmine [ comes with assertion librarires]
+ b) JEST [ comes with assertion librarires]
+ c) Mocha [ doesn;t have assertion library]
+
+ AAA ==> Assemble Action Assert
+ chai --> Assertion library
+
+====================================================
+
+NodeJs as an environmet for buidling web application 
+
+1) we have many "js" / "ts" / "jsx" / "tsx" files 
+
+legacy way of using JS files:
+	index.html
+
+	<script src="a.js"> </script>
+	<script src="b.js"> </script>
+	<script src="c.js"> </script>
+	<script src="d.js"> </script>
+
+	problem: many network hits; order should be mainitened
+
+2) we need to do "testing", "linting" "minify" , "uglify" , "code coverage"
+
+3) we need to bundle them "bundle.js"
+	
+	<script src="bundle.js" > </script>
+4) we need to make our code compatable with browser [ typescript, ES6/7]
+	transcompiler ==> babel or tsc
+
+JavaScript build tools: Grunt, Gulp, Webpack
+===============================================
 
 
 
