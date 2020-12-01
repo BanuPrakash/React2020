@@ -11,7 +11,7 @@ Email: banu@lucidatechnologies.com; banuprakashc@yahoo.co.in
 https://www.linkedin.com/in/banu-prakash-50416019/
 
 
-Github: https://github.com/BanuPrakash/react17
+Github: https://github.com/BanuPrakash/React2020
 -------------------------------------------------------------------------
 Softwares Required:
 1) Chrome Webbrowser with following extensions
