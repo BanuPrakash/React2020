@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function doTask() {
+            return new Promise( (resolve, reject) => {
+                setTimeout(() => {
+                     resolve("Completed First :-)")
+                }, 1000);
+            })
+        }
+
+        function doAnotherTask() {
+            return new Promise( (resolve, reject) => {
+                setTimeout(() => {
+                    resolve("Completed Second :-)")
+                }, 2000);
+            })
+        }
+
+        function someTask() {
+            return "good";
+        }
+
+        Promise.all([doTask(), doAnotherTask(), someTask()]).then( values => {
+            console.log(values[0]);
+            console.log(values[1]);
+            console.log(values[2]);
+        });
+        // doTask().then( res => console.log(res),
+        //                rej => console.log("ERROR " , rej)
+        // );
+
+        console.log("The END!!!");
+
+    </script>
+</body>
+</html>

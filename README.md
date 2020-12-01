@@ -294,6 +294,7 @@ let sub = (x,y) => x - y;
 // default arguments
 let add = (x = 0, y = 0, z = 0) => x + y + z;
 
+Note: arrow functions doesn't have its own context: [this used within arrow function will use the enclosing context]
 
 3) Deconstructing arrays
 
@@ -320,6 +321,156 @@ let add = (x = 0, y = 0, z = 0) => x + y + z;
 	let {name:x, price:y} = p;
 
 =================================================
+ Arrow functions gets the "context ==> this" from enclosing scope
+ whereas the functon gets "global context"
+
+var age = 10;  
+function Person() {
+  this.age = 42;  
+  setTimeout(function () { 
+    console.log("this.age", this.age); // yields "10"  
+  }, 100);
+}
+
+var p = new Person();
+
+===========
+
+var age = 10;  
+function Person() {
+  this.age = 42;  
+  setTimeout(() => {  
+    console.log("this.age", this.age); // yields "42"  
+  }, 100);
+}
+
+var p = new Person();
+============================================
+
+5) Template Variable using String literal [ tick marks]
+
+let name = "Smith";
+
+let content = ` 
+	<p>first line 
+	Name is ${name}
+	Good Day
+	</p>
+`;
+
+content = "<p>first line <br /> Name is " + name + " <br /> Good Day";
+
+====================================
+
+6) Promise API for asynchronous functions
+
+Synchronous functions
+
+function doTask() {
+	..
+}
+
+let res = doTask();
+console.log(res);
+console.log("end");
+
+=============
+asynchronous functions : assume doTask is async operations
+[ making an HTTP call to server or code executing after timeout, click button, ..]
+
+function doTask() {
+	..
+}
+
+//doTask(); // promise 
+
+doTask().then( (res) => {
+		// resolved operation
+},
+(rej) => {
+	// rejected operation
+})
+
+console.log("end");
+
+
+================
+
+doSomeTask().
+	then( res => ...).
+	then( secres => ....).
+	then( third => ...).
+	catch(err => console.log(err));
+
+fetch('https://jsonplaceholder.typicode.com/posts/1')
+.then( response => response.json() )
+.then( body => console.log(body));
+
+===========================================
+7) async and await
+==================================
+
+8) Generators
+
+	function* doTask() {
+		code
+		code
+		yield "first result";
+		code
+		code
+		yield "second result";
+		...
+	}
+
+
+	let iter = doTask(); // iterator
+
+	iter.next();
+
+	iter.next(); {"done": false, "value": "second result"}
+
+	==========
+
+	function* doTask() {
+
+		yield "one";
+		yield "two";
+		yield "three";
+
+	}
+
+	var iter = doTask()
+
+
+	iter.next()
+	iter.next()
+=========================
+
+let p = {"name" : "HP", "price": 135000}
+
+let r = p; // reference
+r.price = 54322
+p 
+{name: "HP", price: 54322}
+
+============
+
+copy instead of reference:
+let obj = {...p}
+
+old way:
+let obj = Object.clone(p);
+
+=======================================
+
+
+
+
+
+
+
+
+
 
 
 
