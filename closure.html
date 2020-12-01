@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>Using Closure for Memoization [ concept of caching ]</p>
+    <script>
+        function memoize(fn) {
+            var cache = {};
+            
+            return function(no) {
+                if(!cache[no]) {
+                    cache[no] = fn(no);
+                }
+                return cache[no];
+            }
+        }
+        function fibanocci(no) {
+            return no === 1 || no === 0 ? no : (fibanocci(no -1) + fibanocci(no -2)); 
+        }
+
+        function getEmployee(id) {
+            // make a rest call and return
+        }
+
+        var memFib = memoize(fibanocci);
+        var memGetEmployee = memoize(getEmployee);
+        console.time("first");
+             console.log(memFib(34));
+        console.timeEnd("first");
+
+        console.time("second");
+             console.log(memFib(34));
+        console.timeEnd("second");
+    </script>
+</body>
+</html>
