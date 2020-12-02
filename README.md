@@ -959,3 +959,317 @@ React is just a view library ( view part; no controller and no model)
 
 ===============================================================
 
+let Welcome = React.createElement("h1",{style:{'color':'red'}}, "Welcome to React 17");
+
+ReactDOM.render(Welcome, document.getElementById("app"))
+
+Virtual DOM
+
+Welcome = {
+	tagName : "h1",
+	style : ...
+	textcontext : "Welcome to ..."
+}
+
+========================================
+
+functional components and class components
+
+Functional components returns JSX [ JavaScript + XML]
+it should have one root element
+
+function Welcome() {
+  return <div>
+        <h1>
+          Welcome to React.js
+        </h1>
+    </div>
+}
+
+ReactDOM.render(<Welcome />, document.getElementById("app"))
+
+
+props : mechanism using which parent component passes data to child 
+
+function Welcome(props) {
+  return <div>
+        <h1>
+           {props.title} in {props.name}
+        </h1>
+    </div>
+}
+
+ReactDOM.render(<Welcome title="Welcome to programming" name="Adobe"/>, document.getElementById("app"));
+
+function Welcome({title, name}) {
+  return <div>
+        <h1>
+           {title} in {name}
+        </h1>
+    </div>
+}
+
+ReactDOM.render(<Welcome title="Welcome to programming" name="Adobe"/>, document.getElementById("app"))
+
+==========
+
+class Welcome extends React.Component {
+	 // instance varaibels
+
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    let {title, name} = this.props;
+    return <div>
+        <h1>
+           {title} in {name}
+        </h1>
+    </div>
+  }
+
+  handleClick() {
+
+	}
+
+  handleSubmit() {
+
+	}
+}
+
+ReactDOM.render(<Welcome title="Welcome g" name="Adobe"/>, document.getElementById("app"));
+
+Preference : use class component if we have state and behaviour
+
+const data =[  
+   {  
+      "name":"Baked Salmon",
+      "ingredients":[  
+         {  
+            "name":"Salmon",
+            "amount":1,
+            "measurement":"l lb"
+         },
+         {  
+            "name":"Pine Nuts",
+            "amount":1,
+            "measurement":"cup"
+         },
+         {  
+            "name":"Butter Lettuce",
+            "amount":2,
+            "measurement":"cups"
+         },
+         {  
+            "name":"Yellow Squash",
+            "amount":1,
+            "measurement":"med"
+         },
+         {  
+            "name":"Olive Oil",
+            "amount":0.5,
+            "measurement":"cup"
+         },
+         {  
+            "name":"Garlic",
+            "amount":3,
+            "measurement":"cloves"
+         }
+      ],
+      "steps":[  
+         "Preheat the oven to 350 degrees.",
+         "Spread the olive oil around a glass baking dish.",
+         "Add the salmon, garlic, and pine nuts to the dish.",
+         "Bake for 15 minutes.",
+         "Add the yellow squash and put back in the oven for 30 mins.",
+         "Remove from oven and let cool for 15 minutes. Add the lettuce and serve."
+      ]
+   },
+   {  
+      "name":"Fish Tacos",
+      "ingredients":[  
+         {  
+            "name":"Whitefish",
+            "amount":1,
+            "measurement":"l lb"
+         },
+         {  
+            "name":"Cheese",
+            "amount":1,
+            "measurement":"cup"
+         },
+         {  
+            "name":"Iceberg Lettuce",
+            "amount":2,
+            "measurement":"cups"
+         },
+         {  
+            "name":"Tomatoes",
+            "amount":2,
+            "measurement":"large"
+         },
+         {  
+            "name":"Tortillas",
+            "amount":3,
+            "measurement":"med"
+         }
+      ],
+      "steps":[  
+         "Cook the fish on the grill until hot.",
+         "Place the fish on the 3 tortillas.",
+         "Top them with lettuce, tomatoes, and cheese."
+      ]
+   }
+];
+
+<Recipe ... />
+
+ReactDOM.render(<Menu title="Delicious recipes" recipes={data} />, document.getElementById("app"))
+
+Post lunch ==> 2:00
+
+npx create-react-app customerapp
+
+===========================================
+
+
+code of Ashish:
+function Menu({recepies}) {
+  return <div> 
+      recepies.map (r =>  <h1> {r.name} </h1>    );
+
+    </div>
+}
+
+function Recepie({recepie}) {
+  return (<li>{recepie.name}</li>)
+}
+
+ReactDOM.render(<Menu title= "Delecious recipes" recepies={data}/>, document.getElementById("app"));
+
+Rishab:
+const data =[  
+   {  
+      "name":"Baked Salmon",
+      "ingredients":[  
+         {  
+            "name":"Salmon",
+            "amount":1,
+            "measurement":"l lb"
+         },
+         {  
+            "name":"Pine Nuts",
+            "amount":1,
+            "measurement":"cup"
+         },
+         {  
+            "name":"Butter Lettuce",
+            "amount":2,
+            "measurement":"cups"
+         },
+         {  
+            "name":"Yellow Squash",
+            "amount":1,
+            "measurement":"med"
+         },
+         {  
+            "name":"Olive Oil",
+            "amount":0.5,
+            "measurement":"cup"
+         },
+         {  
+            "name":"Garlic",
+            "amount":3,
+            "measurement":"cloves"
+         }
+      ],
+      "steps":[  
+         "Preheat the oven to 350 degrees.",
+         "Spread the olive oil around a glass baking dish.",
+         "Add the salmon, garlic, and pine nuts to the dish.",
+         "Bake for 15 minutes.",
+         "Add the yellow squash and put back in the oven for 30 mins.",
+         "Remove from oven and let cool for 15 minutes. Add the lettuce and serve."
+      ]
+   },
+   {  
+      "name":"Fish Tacos",
+      "ingredients":[  
+         {  
+            "name":"Whitefish",
+            "amount":1,
+            "measurement":"l lb"
+         },
+         {  
+            "name":"Cheese",
+            "amount":1,
+            "measurement":"cup"
+         },
+         {  
+            "name":"Iceberg Lettuce",
+            "amount":2,
+            "measurement":"cups"
+         },
+         {  
+            "name":"Tomatoes",
+            "amount":2,
+            "measurement":"large"
+         },
+         {  
+            "name":"Tortillas",
+            "amount":3,
+            "measurement":"med"
+         }
+      ],
+      "steps":[  
+         "Cook the fish on the grill until hot.",
+         "Place the fish on the 3 tortillas.",
+         "Top them with lettuce, tomatoes, and cheese."
+      ]
+   }
+];
+
+function Menu({title, recipes}) {
+  return <div> 
+    <h1>
+      {title}
+      </h1>
+     {
+      recipes.map(m =>   <Recipes recipe={m}/>) 
+     
+    </div>
+}
+
+function Recipes({recipe}) {
+  return <div>
+         <h2>
+          {recipe.name}
+         </h2>
+          { 
+            recipe.ingredients.map(r => <Ingredients ingredient={r}/>)
+          }
+          <h3>
+            Steps:
+         </h3>
+          { 
+            recipe.steps.map(r => <Steps step={r}/>)
+          }
+        </div>
+}
+
+function Ingredients({ingredient}){
+  return <div>
+          *
+          {ingredient.name}
+        </div>
+}
+
+function Steps({step}){
+  return <div>
+    {step}
+  </div>
+}
+ReactDOM.render(<Menu title="Delicious Recipes" recipes={data}/>, document.getElementById("app"));
+
+============================================================================================
+
