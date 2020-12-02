@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import CustomerRow from './CustomerRow';
+import Filter from './Filter';
 
 export default class CustomerList extends Component {
 
@@ -49,9 +50,15 @@ export default class CustomerList extends Component {
         ],
     };
 
+    constructor(props) {
+        super(props);
+        this.state.complete = this.state.customers;
+    }
+
     render() {
         return (
             <div>
+                <Filter filterEvent={this.filterCustomers.bind(this)} />
                 {
                     this.state.customers.map(c => <CustomerRow customer={c} delEvent={(id) => this.deleteCustomer(id)} key={c.id} />)
                 }
@@ -59,11 +66,18 @@ export default class CustomerList extends Component {
         )
     }
 
+    filterCustomers(txt) {
+        console.log(txt);
+        let custs = this.state.complete.filter(c => c.lastName.toUpperCase().indexOf(txt.toUpperCase()) >= 0);
+        this.setState({
+            customers : custs
+        })
+    }
+
     deleteCustomer(id) {
         let custs = this.state.customers.filter(c => c.id !== id);
         this.setState({
             customers : custs
         })
-
     }
 }

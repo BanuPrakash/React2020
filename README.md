@@ -1273,3 +1273,116 @@ ReactDOM.render(<Menu title="Delicious Recipes" recipes={data}/>, document.getEl
 
 ============================================================================================
 
+npx create-react-app customerapp
+
+create-react-app is an npm executable module which generates a scaffolding code with webpack config and babel
+
+=======
+
+npx create-react-app customerapp --typescript
+
+================
+
+
+npm i -g create-react-app
+
+create-react-app customerapp
+
+==========
+
+
+webpack ==> entry ==> index.js
+
+index.js ==> includes App.js
+
+webapck creates a bundle.js and adds it at runtime into index.html
+
+index.html
+
+<div id="root"></div> // <App/> is rendered here
+
+ <div className="App">
+
+without react:  <div class="App">
+
+=============================================
+
+props ==> mechaism ==> data from parent to child
+
+state ==> Object will have state and behaviour
+
+Button 
+	caption, color, size, enabled ==> state
+	onclick, onmouseover ==> actions ==> behaviour
+
+
+
+ class Sample extends Component {
+
+ state = {
+		 "name" : "A",
+ 		 "age" : 22
+	}
+
+
+	...
+
+	task() {
+
+		// async operation
+		this.setState({
+				"age" : 99
+		}, () => {
+				// push to server, make an api call, log updates
+		});
+	}
+}
+
+
+
+ this.state.customers.map(c => <CustomerRow customer={c} delEvent={this.deleteCustomer.bind(this)} key={c.id} />)
+ this.state.customers.map(c => <CustomerRow customer={c} delEvent={(id) => this.deleteCustomer(id)} key={c.id} />)
+                
+ ============================
+
+ React Testing Library [ RTL] is a wrapper on top of JEST ==> additional assertion apis to test components
+
+ container.querySelector('input[type=text]')
+
+ Angular TestBED ==> Jasmine
+
+getByXXXX() ==> throws exception if not found
+
+queryByXXX() ==> returns null if not found
+
+findByXXX() ==> for Promise based component creation
+
+
+getByRoleName("button")
+getByText(/text/i);
+getByPlaceHolderText(...);
+getByTestId(..); 
+
+<div data-testid="12"></div>
+
+====================
+
+code Coverage:
+
+npm test -- --coverage
+
+===============
+
+componentDidMount() ==> Life cycle method
+
+component constructor ==> render() [ FCP] ==>  componentDidMount() ==> render();
+
+Any API calls should be done componentDidMount()
+
+=============
+
+react-router-dom ; styled-components; React Context; bootstrap; font awesome
+
+npx create-react-app phoneapp
+
+==============================
