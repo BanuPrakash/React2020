@@ -607,9 +607,355 @@ legacy way of using JS files:
 
 JavaScript build tools: Grunt, Gulp, Webpack
 ===============================================
+function Course(config:any) { 
+    return function (target:any) {
+      Object.defineProperty(
+          target.prototype,
+          'course',
+          {value: () => config.course} 
+      )
+    }
+  }
+   "cypress": "cypress open",
+    "cypress-test": "cypress run"
+  
+    "devDependencies": {
+    "@cypress/code-coverage": "^3.8.2",
+    "@cypress/instrument-cra": "^1.4.0",
+    "cypress": "^5.5.0"
+  }
+
+=============
+
+ state = {
+        "customers" :[{
+            "id": 1,
+            "firstName": "Rachel",
+            "lastName": "Green ",
+            "gender": "female",
+            "address": "Blore"
+        },
+        {
+            "id": 2,
+            "firstName": "Chandler",
+            "lastName": "Bing",
+            "gender": "male",
+            "address": "West Street"
+        },
+        {
+            "id": 3,
+            "firstName": "Joey",
+            "lastName": "Tribbiani",
+            "gender": "male",
+            "address": "Kattegat"
+        },
+        {
+            "id": 4,
+            "firstName": "Monica",
+            "lastName": "Geller",
+            "gender": "female",
+            "address": "some address"
+        },
+        {
+            "id": 5,
+            "firstName": "Ross",
+            "lastName": "Geller",
+            "gender": "male",
+            "address": "some address "
+        },
+        {
+            "id": 6,
+            "firstName": "Phoebe",
+            "lastName": "Buffay",
+            "gender": "female",
+            "address": "some address"
+        }
+    ],
+    };
+
+=============
+
+Day 2:
+------
+	Functional style of programming ==> HOF ==> Closure
+	prototype ==> adding methods to our class / objects
+	ES 6 features
+	Node.js environment for building web application
+	Webpack ==> babel for transcompiler
+
+	Java:
+
+	class Person {
+		private String name;
+		Person() { }
+
+		public String getName() {
+
+		}
+	}
+
+	JS:
+	FUNCTION CONSTRUCTOR:
+	function Person(name, age) {
+		this.name = name; // state
+	}
+
+	Person.prototype.getName = function () { return this.name; }
+	new Person("..", 31);
+	=======
+
+	ES 6:
+	class Person {
+		constructor(name, age) {
+			this.name = name;
+			this.age = age;
+		}
+
+		 getName() {
+		 	return this.name
+		}
+	}
+
+==================================================
+
+ "sourceMap": true
+
+ a.ts  ==> a.map.js ===> a.js [ executed on Browser ]
 
 
+"module": "es6" [ export and import]
+
+"module": "commonjs", [ module.exports and require]
+
+====================
+
+TypeScript ==> layer on JS ==> introduces concept of data types to JavaScript
+
+ts --> tsc --> js [ executes on JS engine]
 
 
+typeof x
 
+
+data types in typescript:
+
+1) boolean
+
+	var flag:boolean = false;
+
+	flag = "1"; // tsc will throw an error on this line
+
+2) string
+
+	var name:string = 'Raj';
+
+	name = 100; //error
+
+3) number
+	var x: number = 10;
+
+4) any
+
+	var data: any;
+
+	data = 200;
+
+	data = [4,6,7,2];
+
+	data = "test";
+
+5) array
+
+	let elems:number[] = [4,6,2,7,1];
+
+6) enum
+	
+	enum Priority {
+		LOW,
+		MED,
+		HIGH
+	}
+
+	let high:Priority = Priority.HIGH;
+
+==============================================================================
+
+functions in typescript
+-----------------------
+
+function add(x:number, y: number) : number {
+	return x + y;
+}
+
+add(4,5); // valid
+
+add("a", 10) ; // tsc error
+
+
+function add(x,y) { } // valid in typescript
+
+function add(x:number, y: number) : void {
+	console.log( x + y );
+}
+
+=======================================
+
+interfaces
+
+for shape
+
+interface Person {
+	id:number,
+	name:string,
+	address?:string //optional
+}
+
+function addPerson(person:Person) {
+	// code
+}
+
+addPerson( { "id": 55, "name": "sam"});
+
+===========================
+
+interface Timer {
+	setTimer(no: number) : void
+}
+
+
+class Game implements Timer {
+	
+	setTimer(no:number) {
+		// code 
+	}
+}
+
+====================================
+
+classes in typescript
+
+class Person {
+	private name:string;
+	private age: number;
+
+	constructor(name, age) {
+		this.name = name;
+		this.age = age;
+	}
+
+	public getName() : string {
+		return this.name;
+	}
+}
+
+
+let p:Person = new Person("a", 22);
+
+p.getName(); 
+
+p.name; // error
+
+-------------------
+
+class Person {
+	 
+	constructor(private name:string, private age:number) {
+		this.name = name;
+		this.age = age;
+	}
+
+	public getName() : string {
+		return this.name;
+	}
+}
+
+-----------
+
+class x extends y {
+	
+}
+
+---------------------------------------------------
+
+Decorators: @decoratorName
+
+
+@Component({
+	styles: ...
+	template: ...
+})
+class AppComponent {
+	product
+}
+
+@Component({
+	styles: ...
+	template: ...
+})
+class CardComponent {
+	row
+}
+
+
+class Person {
+	
+	@Upper()
+	private firstName:string;
+
+	@Valid()
+	private getEmail(): string {
+
+	}
+}
+
+npm i -D typescript ts-loader
+
+============================
+
+codepen.io
+
+15 min tea break
+
+npx create-react-app customerapp
+
+===============================================================================
+
+React.js v17
+
+data ==> rendered ==> view
+
+Server side rendering 	==> to the client it sends view [ html]
+	JSP, ASP.NET, PHP, EJS, JADE , PUG, 
+
+Client side rendering
+	data is fetched to client machine [ Browser] and converted into views
+
+	JavaScript: jQuery , Mustache, Handlebars, underscore ==> view templates
+
+	issues with handling single page applications: SPA
+
+	1) we need to have different views for different url
+
+		http://amazon.com/mobiles/iphone
+
+		http://amazon.com/mobiles/pixel
+
+		http://amazon.com/cart
+
+	2) Data binding [ JSON ==> placeholder ]. don;t need to refersh entire screen
+
+	3) Dependency Injection
+
+===========
+Model View Controller
+
+Backbone.js, React.js, Angular, Vue, ...
+
+Angular Framework 								
+	1) MVC
+	2) builtin Dependency Injection container
+
+React is just a view library ( view part; no controller and no model)
+
+===============================================================
 
