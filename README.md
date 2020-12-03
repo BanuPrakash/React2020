@@ -1682,4 +1682,203 @@ function App() {
 
 copy "Button.js" and "Context.js" into "components" folder
 replace "Navbar.js" with the one share.zip
+ 
+ full page refresh
+ <a href="/"> Adobe </a>
 
+Router: instead of a href use "Link"
+ <Link to="/">
+                    <i className="navbar-brand">
+                        Adobe
+                    </i>
+ </Link>
+
+Navbar.js ==> styled-compnent button ; bootstrap navbar ; Link for Router  links instead of <a href ="">
+
+=================
+
+ React Developer Tools extension in Chrome
+ Redux Developer Tools
+
+
+==================================================================
+
+Task:
+
+	In Product.js
+	clicking on image Details page is rendered
+	display title, image, company and info
+
+==========
+ 
+  npx json-server --watch data.json --port 1234
+
+  http://localhost:1234/products
+
+  http://localhost:1234/products/2
+============
+
+React ==> 3rd party library ==> http call
+
+fetch()
+axios
+
+=======================================================
+
+productApi.js
+	will have all our http calls
+	getProducts() {
+		http
+	}
+
+	getProductById(id) {
+		http
+	}
+
+customerApi.js
+
+=====================================================
+
+
+
+class Child extends React.Component {
+  render() {
+  	console.log("re-render child component.");
+  	return (
+    	<div>
+      		<p>child component which has nothing to do with parent count</p>
+    	</div>
+  	);
+  }
+};
+
+class Parent extends React.Component {
+  state = {
+  count: 0
+ };
+  
+  increment() {
+  	this.setState({
+  	count: this.state.count + 1
+  })
+ }
+ 
+  render() {
+  	console.log("re-render parent component");
+  	return (
+    	<>
+      		<p>Count: {this.state.count}</p>
+      		<button onClick={() => this.increment()}>Increment</button>
+      	<Child />
+    	</>
+  	);
+  }
+}
+
+ReactDOM.render(<Parent />, document.getElementById('app'));
+
+
+child component already has props prev sent by parent
+
+when the parent state / props change it will pass then to child [ nextState and nextProps]
+
+============
+class Child extends React.Component {
+  
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(this.props, nextProps);
+    if(JSON.stringify(this.props) === JSON.stringify(nextProps)) {
+      return false;
+    }
+    return true;
+  }
+
+  render() {
+  	console.log("re-render child component.");
+  	return (
+    	<div>
+      		<p>child component which has nothing to do with parent count { this.props.name }</p>
+    	</div>
+  	);
+  }
+};
+
+class Parent extends React.Component {
+  state = {
+  count: 0,
+  name : 'Peter'
+ };
+  
+  increment() {
+  	this.setState({
+  	count: this.state.count + 1
+  })
+ }
+ 
+  render() {
+  	console.log("re-render parent component");
+  	return (
+    	<>
+      		<p>Count: {this.state.count}</p>
+      		<button onClick={() => this.increment()}>Increment</button>
+      	<Child name={this.state.name}/>
+    	</>
+  	);
+  }
+}
+
+ReactDOM.render(<Parent />, document.getElementById('app'));
+
+=================
+
+class Child extends React.PureComponent {
+   
+  render() {
+  	console.log("re-render child component.");
+  	return (
+    	<div>
+      		<p>child component which has nothing to do with parent count { this.props.name }</p>
+    	</div>
+  	);
+  }
+};
+
+if props is primitive and not array or object
+
+===============================================
+function Child(props) {
+   	console.log("re-render child component.");
+  	return (
+    	<div>
+      		<p>child component which has nothing to do with parent count { props.name }</p>
+    	</div>
+  	);
+ };
+
+let MemoChild = React.memo(Child); // PureComponent
+
+class Parent extends React.Component {
+  state = {
+  count: 0,
+  name : 'Peter'
+ };
+  
+  increment() {
+  	this.setState({
+  	count: this.state.count + 1
+  })
+ }
+ 
+  render() {
+  	console.log("re-render parent component");
+  	return (
+    	<>
+      		<p>Count: {this.state.count}</p>
+      		<button onClick={() => this.increment()}>Increment</button>
+      		<MemoChild name={this.state.name}/>
+    	</>
+  	);
+  }
+}
+
+ReactDOM.render(<Parent />, document.getElementById('app'));

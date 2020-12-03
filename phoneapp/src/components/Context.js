@@ -1,53 +1,47 @@
 import React, { Component } from 'react';
-// import {storeProducts, detailProduct} from './data';
+// import { storeProducts, detailProduct } from '../data';
+
 import axios from 'axios';
 
 const ProductContext = React.createContext();
-
 // Provider
 // Consumer
 
 class ProductProvider extends Component {
     state = {
-        products : [],
+        products: [],
         cart: [],
         detailProduct: {},
-        cartSubTotal : 0,
-        cartTax : 0,
-        cartTotal : 0
+        cartSubTotal: 0,
+        cartTax: 0,
+        cartTotal: 0
     }
 
     // called after constructor and render()
-    componentDidMount(){
+    componentDidMount() {
         this.setProducts();
     }
-    setProducts = () => {
-        let prds = [];
-        axios.get("http://localhost:1234/products").then(
-            (resp) => {
-                prds  = resp.data;
-                this.setState({
-                    products: prds
-                }, () => console.log ("products intialized", prds));
-            }
-        );
+
+     setProducts = async () => {
+        let prds = await axios.get('http://localhost:1234/products');
+
         // storeProducts.forEach(p => {
-        //     // make a copy and add to prds
-        //     prds.push({...p});
+        //     prds.push({ ...p });
         // });
-
-       
-
         
+        this.setState({
+            products: prds.data,
+            detailProduct: prds.data[0]
+        });
     }
 
-    getItem =(id) => {
-       let prd = this.state.products.filter(p => p.id == id)[0];
-       return prd;
+    getItem = (id) => {
+        let prd = this.state.products.filter(p => p.id == id)[0];
+        return prd;
     }
 
     handleDetail = (id) => {
-       
+
     }
 
     addToCart = (id) => {
@@ -56,7 +50,7 @@ class ProductProvider extends Component {
         prd.inCart = true;
         prd.count = 1; // how many items in cart
         prd.total = prd.price;
-        let cartCopy =  this.state.cart;
+        let cartCopy = this.state.cart;
         cartCopy.push(prd);
         this.setState({
             cart: cartCopy
@@ -64,31 +58,29 @@ class ProductProvider extends Component {
     }
 
     increment = (id) => {
-        let prd =   this.state.cart.filter(p => p.id == id)[0];
+        let prd = this.state.cart.filter(p => p.id == id)[0];
         prd.count++;
         prd.total = prd.price * prd.count;
         this.setState({
             cart: this.state.cart
         })
-         
-     }
+
+    }
 
     decrement = (id) => {
-        
+
     }
 
     removeItem = (id) => {
-    
+
     }
 
     clearCart = () => {
-        
+
     }
 
     checkOut = () => {
-        this.state.cart.map(item => {
-            axios.post("http://localhost:1234/cart", item).then( () => console.log("added!!!"));
-        });
+       axios.post('http://localhost:1234/orders', this.state.cart) 
     }
 
 
@@ -96,16 +88,16 @@ class ProductProvider extends Component {
         let subTotal = 0.0;
         this.state.cart.map(item => {
             return subTotal += item.total;
-        }); 
+        });
 
-        const tempTax = subTotal *0.1;
+        const tempTax = subTotal * 0.1;
         const tax = parseFloat(tempTax.toFixed(2));
-        const total = subTotal + tax ;
+        const total = subTotal + tax;
         this.setState(() => {
             return {
-                cartSubTotal : subTotal,
-                cartTax : tax,
-                cartTotal : total
+                cartSubTotal: subTotal,
+                cartTax: tax,
+                cartTotal: total
             }
         });
     }
@@ -117,10 +109,10 @@ class ProductProvider extends Component {
                 addToCart: this.addToCart,
                 increment: this.increment,
                 decrement: this.decrement,
-                removeItem : this.removeItem,
+                removeItem: this.removeItem,
                 clearCart: this.clearCart
             }}>
-                {this.props.children}                
+                {this.props.children}
             </ProductContext.Provider>
         );
     }
@@ -129,4 +121,4 @@ class ProductProvider extends Component {
 
 const ProductConsumer = ProductContext.Consumer;
 
-export {ProductProvider, ProductConsumer};
+export { ProductProvider, ProductConsumer };
