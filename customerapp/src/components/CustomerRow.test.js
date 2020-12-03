@@ -4,7 +4,7 @@ import CustomerRow from './CustomerRow';
 describe("testing customer row", () => {
   let callback = jest.fn(); // mock callback function 
 
-    let c = {
+  let c = {
         "id": 4,
         "firstName": "Monica",
         "lastName": "Geller",
@@ -13,7 +13,7 @@ describe("testing customer row", () => {
     };
 
     it("test render customer row", () => {
-        render(<CustomerRow customer={c} delEvent={(id) => callback(id)} key={c.id} />);
+        render(<CustomerRow customer={c} delEvent={(id) => callback(id)}   key={c.id} />);
         let elem = screen.getByText(/Monica/i);
         expect(elem).toBeInTheDocument();
         screen.debug();

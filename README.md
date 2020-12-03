@@ -1451,4 +1451,235 @@ ReactDOM.render(<Parent />, document.getElementById('app'));
 ========================
 Day 3:
 
+npx create-react-app phoneapp
+
 customerapp> npm i -D cypress @cypress/instrument-cra
+
+=====================================================
+
+Recap:
+	1) createElement, functional components, class components
+	2) props and state
+	3) React Testing Library [getByXXX, queryByXXX, findByXXX methods of screen]
+	using container to access DOM elements using DOM api
+	Unit testing
+	also mocking the callback [ testing in isolation]
+
+	class Parent  extends Component {
+		state = { count : 100}
+
+		render() {
+			return <Child value={this.state.count} />
+		}
+
+	}
+
+	class Child extends Component {
+		render() {
+			return <h1> {this.props.value} </h1>
+		}
+	}
+----------------------------
+
+How does event loop work in JavaScript with respect to Browser
+
+
+event loop
+
+while(true && condition) {
+	if(macroTask.getTask()) {
+
+		execute macroTask
+	}
+
+	while(microTask.getTasks()) {
+		iterate thro all microtsask and push it to call stack
+	}
+}
+=========================================
+ 
+RTL ==> JEST DOM
+
+cypress ==> E2E ==> testing on Browser
+
+angular ==> Protractor [ Seleinum ]
+
+=================================
+
+npx create-react-app phoneapp
+
+phoneapp$ npm i bootstrap styled-components react-router-dom
+
+======================================================================
+
+React Context ==> central store of state and behaviour ==> introduced in version 16.x
+
+Before ReactContext ==> props was the only way data could pass from parent to child
+
+===========
+
+api.js ==> REST calls
+
+redux ==> state managenent ==> single store
+
+context ==> pulls approporiate state from redux and shares with set of components
+	product related; user related; cart related ==> Productcontext; UserContext; CartContext ==> state & business logic
+====================================
+
+  	let PersonContext = React.createContext();
+
+	class PersonProvider extends React.Component {
+		 
+    componentDidMount() {
+      this.setState({
+				"name" : "Arya",
+				"email" : "someemail",
+				"updateEmail" : this.updateEmail.bind(this)
+			});
+    }
+
+		updateEmail(email) {
+			this.setState({
+				"email": email
+			});
+		}
+
+		render() {
+			return <PersonContext.Provider value={{...this.state}}>
+					{this.props.children}
+			</PersonContext.Provider>
+		}
+	}
+
+
+	class App extends React.Component {
+		render() {
+			return <PersonProvider>
+				<First />
+				</PersonProvider>
+		}
+	}
+
+	function First() {
+		return <> <h1> I am First !!! <Second /> </h1> </>
+	}
+
+
+	class Second extends React.Component {
+		render() {
+			return <PersonContext.Consumer>
+				{
+					value => {
+						return <>
+							Name : {value.name} <br />
+							Email : {value.email} <br />
+							<button onClick={()=> value.updateEmail("me@gmail.com")} type="button"> Change </button>
+
+						</>
+					}
+				}
+
+			</PersonContext.Consumer>
+		}
+	};
+
+ReactDOM.render(<App/>, document.getElementById("app"))
+
+
+class App
+
+render () {
+	
+	return <div> {this.props.children} </div>
+}
+
+
+<App>
+	<A/>
+	<B/>
+	<C/>
+
+</App>
+
+function udpdate() {
+	
+}
+let PersonContxt = React.createContext({"name": "Sam", "update": update})
+
+
+PhoneApp:
+	a) using Context
+	b) Routers [ react-router-dom ]
+		Why Router?
+		SPA ==> different views for different URI
+
+		http://amazon.com/mobile/iPhone11
+
+		http://amazon.com/cart		
+
+
+		a) for SEO
+ 
+		http://amazon.com/mobile/iPhone11
+		http://adobe.com/products
+
+		b) Bookmark
+		c) History API [ Prev and Back ] ==> will traverse between views instead of pages
+
+			http://amazon.com/mobile/iPhone11
+			http://amazon.com/mobile/pixel3
+	c) RWD ==> Responsive web design ==> bootstrap ==> 12 column system
+	d) REST calls
+
+========
+
+steps:
+1) copy "data.js" from share.zip into "src" folder
+2) overwrite "App.css" from share.zip 
+3) copy "img" folder into "public"
+
+components:
+1) Navbar
+2) ProductList
+3) Product
+4) Cart
+5) CartList
+6) Details
+7) Default
+
+one root element can be returned by jsx
+
+function App() {
+  return (
+    <div>
+    	...
+    </div>
+  );
+}
+
+-----------
+function App() {
+  return (
+    <React.Fragment>
+    	<h2></h2>
+    	<p></p>
+    	<div></div>
+    </React.Fragment>
+  );
+}
+
+-----------------
+function App() {
+  return (
+    <>
+    
+    </>
+  );
+}
+
+
+==========
+
+copy "Button.js" and "Context.js" into "components" folder
+replace "Navbar.js" with the one share.zip
+
