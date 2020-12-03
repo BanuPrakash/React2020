@@ -1386,3 +1386,69 @@ react-router-dom ; styled-components; React Context; bootstrap; font awesome
 npx create-react-app phoneapp
 
 ==============================
+
+while (eventLoop.waitForTask()) {
+  const taskQueue = eventLoop.selectTaskQueue()
+  if (taskQueue.hasNextTask()) {
+    taskQueue.processNextTask()
+  }
+  const microtaskQueue = eventLoop.microTaskQueue
+  while (microtaskQueue.hasNextMicrotask()) {
+    microtaskQueue.processNextMicrotask()
+  }
+}
+
+The job of the event loop is to constantly monitor the message queue (for tasks) and the execution stack and to push the first callback function in-line onto the execution stack, as soon as the stack is empty.
+
+
+All tasks are not created the same inside message queue. There are macro-tasks and micro-tasks.
+
+Examples of macro-tasks are setInterval, setImmediate, setTimeout, I/O tasks.
+
+Examples of micro-tasks are Promises, process.nextTick.
+
+For each of the ‘event loop’, one macro-task is completed out of the macro-task queue. After the respective 
+macro-task is complete, the event loop visits the micro-task queue and the entire queue is completed before moving on to the next.
+============
+
+class Child extends React.Component {
+  render() {
+  	console.log("re-render child component.");
+  	return (
+    	<div>
+      		<p>child component which has nothing to do with parent count</p>
+    	</div>
+  	);
+  }
+};
+
+class Parent extends React.Component {
+  state = {
+  count: 0
+ };
+  
+  increment() {
+  	this.setState({
+  	count: this.state.count + 1
+  })
+ }
+ 
+  render() {
+  	console.log("re-render parent component");
+  	return (
+    	<>
+      		<p>Count: {this.state.count}</p>
+      		<button onClick={() => this.increment()}>Increment</button>
+      	<Child />
+    	</>
+  	);
+  }
+}
+
+ReactDOM.render(<Parent />, document.getElementById('app'));
+
+
+========================
+Day 3:
+
+customerapp> npm i -D cypress @cypress/instrument-cra
