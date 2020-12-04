@@ -1882,3 +1882,668 @@ class Parent extends React.Component {
 }
 
 ReactDOM.render(<Parent />, document.getElementById('app'));
+
+================================================================================
+Here is a simple break down of main concepts
+Stores form your data sources. A store is basically a simple ES6 class. Eventually state is derived from data sources automagically by MobX through ES6 decorators.
+Store exposes observable fields, to which an observer reacts.
+Store additionally can expose derived observable fields as well. They are pure functions on observable fields. MobX calls them computed fields.
+Store can change values of observable fields via actions. This is the only way MobX allows you to change state.
+
+
+import { observable, action } from "mobx";
+export default class CounterStore {
+  @observable count = 0;
+  @action increment() {
+    this.count += 1;
+  }
+  
+  @action decrement() {
+   this.count -= 1;
+  }
+}
+
+import { observable, action, computed } from "mobx";
+export default class UserStore {
+  @observable firstName = "Banu";
+  @observable lastName = "Prakash";
+
+  
+  @action data(data: Object) {
+    if (data.firstName) {
+      this.firstName = data.firstName;
+    }
+    if (data.lastName) {
+      this.lastName = data.lastName;
+    }
+  }
+ 
+  @computed get fullName(): string {
+    return `${this.firstName} ${this.lastName}`;
+  }
+}
+
+
+import { Provider } from "mobx-react";
+export default class App extends Component {
+  render() {
+    return (
+      <Provider {counterStore: new CounterStore(), userStore: new UserStore()}>
+        <Home />
+      </Provider>
+    );
+ }
+}
+
+import { observer, inject } from "mobx-react";
+@inject("counterStore")
+@observer
+class Counter extends Component {
+  render() {
+    return <>Count: {this.props.counterStore.count}</>;
+  }
+}
+
+@inject("userStore")
+@observer
+class FullName extends Component {
+   render() {
+     return <>FullName: {this.props.userStore.fullName}</>;
+   }
+}
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+let Child = (props) =>   {
+  console.log("re-render child component.")
+  return (
+    <div>
+      <p>child component which resets count</p>
+      <button onClick={props.reset}>Reset Count</button>
+    </div>
+  );
+}
+
+const MemoChild = React.memo(Child);
+
+
+const Parent = () => {
+  const [count, setCount] = React.useState(0);
+  console.log("re-render parent component");
+
+  const resetCount = React.useCallback(() => {
+    setCount(0);
+  }, [setCount]);
+  return (
+    <main>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count=>(count+1))}>Increment</button>
+      <MemoChild reset={resetCount} />
+    </main>
+  )
+}
+
+ReactDOM.render(<Parent />, document.getElementById('app'));
+
+===========
+
+
+Day 4:
+======
+Day 3: Context, router, lifecycle methods, PureComponent, React.memo()
+
+HOC, Rerefernce, React Hooks, State Management, Performance profile
+
+
+SampleComponent
+
+render() {
+	return (
+	<Parent>
+		{this.props.children}
+	</Parent>
+	);
+}
+
+usage :
+	<SampleComponent title="Hello">
+			<A/>
+			<B/>
+	</SampleComponent>
+
+use case 2:
+
+	<SampleComponent>
+			<C/>
+			<D/>
+	</SampleComponent>
+=====================================
+
+High Order Component : HOC ==> HOF
+
+function Child() {
+	
+}
+MemoChild = React.memo(Child);
+
+Why HOC?
+ cross-cutting concern ==> code scattering and code tangling
+
+
+ class ProductList extends Component {
+ 	...
+ 	render() {
+ 		if(this.props.isLoading) {
+ 			return <img src="loader.gif" />
+ 		} else {
+ 			this.props.products.map ...
+ 		}
+ 	}
+}
+
+ class OrderList extends Component {
+ 	...
+ 	render() {
+ 		if(this.props.isLoading) {
+ 			return <img src="loader.gif" />
+ 		} else {
+ 			this.props.orders.map ...
+ 		}
+ 	}
+}
+
+AppComponent {
+	productloading: false
+	products 
+	orders
+	componentDidUpdate() {
+			async call to server axios
+	}
+
+	render() {
+		<ProductList isLoading={productloading} products={products} />
+
+	}
+}
+
+=================
+// HOC
+
+const withCounter = (WrappedComponent) => {
+	return class extends React.Component {
+		constructor(props) {
+			super(props);
+			this.state = {
+			count : 0
+		  }
+		}
+		increment = () => {
+				this.setState( {
+					count : this.state.count + 1;
+				})
+		}
+		render() {
+			return {
+				<WrappedComponent count={this.state.count} increment={this.increment} />
+			}
+		}
+	}
+}
+
+class DivComponent extends React.Component {
+	render() {
+		return <>
+				{this.props.count}
+				<button type="button" onClick={() => this.props.increment}>move</button>
+				</>
+			}
+	}
+}
+
+
+class ImageComponent extends React.Component {
+	render() {
+		return <>
+				{this.props.count}
+				<img src="" onMouseover={() => this.props.increment}>move</button>
+				</>
+			}
+	}
+}
+
+
+let WrappedDiv = withLoader(withCounter(DivComponent));
+function App() {
+	return <>
+		<WrappedDiv/>
+	</>
+}
+=================
+const withCounter = (WrappedComponent) => {
+	return class extends React.Component {
+		constructor(props) {
+			super(props);
+			this.state = {
+			count : 0
+		  }
+		}
+		increment = () => {
+				this.setState( {
+					count : this.state.count + 1
+				})
+		}
+		render() {
+			return <WrappedComponent count={this.state.count} increment={this.increment} />
+			 
+		}
+	}
+}
+
+class DivComponent extends React.Component {
+	render() {
+		return <>
+				{this.props.count}
+				<button type="button" onClick={() => this.props.increment()}>move</button>
+				</>
+			}
+}
+class ImgComponent extends React.Component {
+	render() {
+		return <>
+				{this.props.count}
+				<div  onMouseOver={() => this.props.increment()}> image move</div>
+				</>
+			}
+}
+
+
+
+let WrappedDiv =  withCounter(DivComponent);
+let WrappedImg =  withCounter(ImgComponent);
+function App() {
+	return <>
+		<WrappedDiv/>
+    <WrappedImg />
+	</>
+}
+
+ReactDOM.render(<App/>, document.getElementById("app"))
+
+==========================================================================
+
+React Reference:
+
+class App extends React.Component {
+	emailRef = React.createRef(); // reference
+
+	render() {
+		return (
+			<>
+				<input type="text" ref={this.emailRef} />
+				<button onClick={() => this.doTask()}> Click </button>
+			</>
+		)
+	}
+
+	doTask() {
+		console.log(this.emailRef.current.value);
+		this.emailRef.current.focus();
+	}
+}
+ReactDOM.render(<App/>, document.getElementById("app"))
+==================
+
+React Reference:
+
+
+class App extends React.Component {
+	render() {
+		return (
+			<>
+				<input type="text" ref={input => this.emailRef = input} />
+				<button onClick={() => this.doTask()}> Click </button>
+			</>
+		)
+	}
+
+	doTask() {
+		console.log(this.emailRef.current.value);
+		this.emailRef.current.focus();
+	}
+}
+ReactDOM.render(<App/>, document.getElementById("app"));
+
+========================
+
+Forward Reference:
+
+const EmailInput = React.forwardRef((props, ref) => {
+	<input type="text" ref={ref} {...props} />
+});
+
+
+class App extends React.Component {
+	emailRef = React.createRef(); // reference
+	render() {
+		return (
+			<>
+				<EmailInput  ref={this.emailRef} />
+				<button onClick={() => this.doTask()}> Click </button>
+			</>
+		)
+	}
+
+	doTask() {
+		console.log(this.emailRef.current.value);
+		this.emailRef.current.focus();
+	}
+}
+ReactDOM.render(<App/>, document.getElementById("app"));
+
+==========================================================================
+
+React Hooks: Available from React 16 version onwards
+
+functional components vs class components
+	state, behaviour, life cycle methods ==> class components
+
+	class components are heavy ==> extends React.Component
+
+React Hooks to be used in Functional components as an alternate to using Class Component
+
+class App extends Component {
+	state = {
+		count : 0,
+		user : ""
+	}
+
+	setCount() {
+		//	
+	}
+}
+
+React Hooks:
+1) useState
+
+
+function App() {
+	let [count, setCount] = React.useState(0);
+	let [user, setUser] = React.useState("Peter");
+	return (
+		<>
+		Count {count} {user}<br />
+		<button onClick={() => setCount(count + 1)}> Click </button> <br />
+		</>
+	)
+}
+ReactDOM.render(<App/>, document.getElementById("app"));
+
+=================
+
+2) useReducer
+	if state is complex object and conditional mutations
+
+	let initalState = {count : 0};
+
+	let countReducer = (state, action) => {
+
+		switch(action.type) {
+			case "INCREMENT" : return {count : state.count + action.payload};
+			case "DECREMENT" : return {count : state.count -1};
+			default : return state;
+		}
+	}
+
+
+function App() {
+	let [state, dispatch] = React.useReducer(countReducer, initalState);
+	 
+	 function handleIncrement() {
+	 	let action = {"type": "INCREMENT", payload : 10};
+	 	dispatch(action);
+	 }
+	return (
+		<>
+		Count {state.count}  <br />
+		<button onClick={handleIncrement}> Click </button> <br />
+		</>
+	)
+}
+ReactDOM.render(<App/>, document.getElementById("app"));
+
+===============
+
+let initalState = {cart : [], total: 0};
+
+let countReducer = (state, action) => {
+		switch(action.type) {
+			case "ADD_TO_CART" : return {cart : state.cart.push(action.payload), total : state.total};
+			case "DECREMENT" : return {count : state.count -1};
+			default : return state;
+		}
+	}
+
+====================
+ 
+3) useContext()
+let productContext = React.useContext();
+
+4) useEffect()
+
+
+function App() {
+	let [count, setCount] = React.useState(0);
+	
+	setInterval(() => {
+		setCount(count + 1);
+	}, 100);
+	return (
+		<>
+			Count {count} <br />
+		</>
+	)
+}
+ReactDOM.render(<App/>, document.getElementById("app"));
+
+every 100 ms a new timer is started.
+
+setInterval , REST call, any promise based api ==> side effects
+
+any side effect code should be used in useEffect()
+
+----
+
+
+
+function App() {
+	let [count, setCount] = React.useState(0);
+	
+	let [user, setUser] = React.useState("");
+
+	// componentDidUpdate
+	React.useEffect(() => {
+		console.log("called effect 1 ", count)
+	}); 
+
+	// componentDidMount
+	React.useEffect(() => {
+		console.log("called effect 2", count)
+	}, []); 
+
+	// called only on user change
+	React.useEffect(() => {
+		console.log("called effect 3", count)
+	}, [user]); 
+
+	 function handleIncrement() {
+	 	 setCount(count + 1);
+	 }
+
+	return (
+		<>
+			Count {count} <br />
+			<button onClick={handleIncrement}> Click </button> <br />
+		</>
+	)
+}
+ReactDOM.render(<App/>, document.getElementById("app"));
+==================
+
+
+let Child = (props) =>   {
+  console.log("re-render child component.")
+  return (
+    <div>
+      <p>child component which resets count</p>
+      <button onClick={props.reset}>Reset Count</button>
+    </div>
+  );
+}
+
+const MemoChild = React.memo(Child);
+
+
+const Parent = () => {
+  const [count, setCount] = React.useState(0);
+  console.log("re-render parent component");
+
+  const resetCount =  () => {
+    setCount(0);
+  };
+
+  return (
+    <main>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count=>(count+1))}>Increment</button>
+      <MemoChild reset={resetCount} />
+    </main>
+  )
+}
+
+ReactDOM.render(<Parent />, document.getElementById('app'));
+
+===========
+
+5) useCallback
+	is to memoize a function
+
+
+let Child = (props) =>   {
+  console.log("re-render child component.")
+  return (
+    <div>
+      <p>child component which resets count</p>
+      <button onClick={props.reset}>Reset Count</button>
+    </div>
+  );
+}
+
+const MemoChild = React.memo(Child);
+
+
+const Parent = () => {
+  const [count, setCount] = React.useState(0);
+  console.log("re-render parent component");
+
+  const resetCount = React.useCallback( () => {
+    setCount(0);
+  }, [setCount]);
+
+  return (
+    <main>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count=>(count+1))}>Increment</button>
+      <MemoChild reset={resetCount} changed={changed}/>
+    </main>
+  )
+}
+
+ReactDOM.render(<Parent />, document.getElementById('app'));
+
+======
+
+6) useMemo() to memoize a variable
+
+=======================
+
+Errorboundary:
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null, errorInfo : null };
+  }
+   componentDidCatch(error, errorInfo) {
+     this.setState({
+     	hasError: true,
+     	error,
+     	errorInfo
+     })
+  }
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong.</h1>;
+    }
+    return this.props.children; 
+  }
+}
+
+function App() {
+	return (
+		<ErrorBoundary>
+			<Navbar />
+			<First />
+			<List />
+		</ErrorBoundary>
+	)
+}
+
+=============================================================
+"prop-types": "^15.7.2",
+
+import PropTypes from 'prop-types';
+
+ShoppingList:
+ <List
+              items={items}
+              removeListItem={this.removeListItem}
+              removeAllListItems={this.removeAllListItems}
+            />
+
+
+List:
+List.propTypes = {
+  removeListItem: PropTypes.func.isRequired,
+  removeAllListItems: PropTypes.func.isRequired,
+  items: PropTypes.array.isRequired,
+};
+
+=============
+
+State management with React Context
+
+State management using Flux architecture
+=================
+
+1) npm i
+
+2) npm start
+
+test your application
+go thro the code
+
+3) stop the server
+
+4) 
+
+npm i flux
+
+npm i object-assign
+
+==================
+
+Resume @ 2:00
+
+
+
+
